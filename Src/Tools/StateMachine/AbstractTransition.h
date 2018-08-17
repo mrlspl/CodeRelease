@@ -16,7 +16,7 @@ class AbstractTransition {
 public:
 	virtual ~AbstractTransition() {}
 	virtual bool condition() = 0;
-	std::string destination;
+	virtual std::string destination() const = 0;
 };
 
 #endif /* ABSTRACTTRANSITION_H_ */

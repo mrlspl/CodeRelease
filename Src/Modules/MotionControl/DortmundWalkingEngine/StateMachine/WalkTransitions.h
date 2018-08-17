@@ -10,36 +10,40 @@
 #include "WalkPhases.h"
 #include "../LegPoint.h"
 #include "Representations/Sensing/FallDownState.h"
-#include "../FootStepsPoint.h"
 #include "Representations/MotionControl/MotionRequest.h"
 
-
-class StepFinish : public AbstractTransition {
+class LeftStepFinish : public AbstractTransition {
 public:
-  StepFinish(const FootStepsPoint& footStepsPoint, LegPoint& legPoint);
-	virtual bool condition();
+  LeftStepFinish(const SingleSupportLeft& source);
+  virtual bool condition();
+  virtual std::string destination() const;
 private:
-	LegPoint& _legPoint;
-	FootStepsPoint _footStepsPoint;
-  Point p4 = Point(_footStepsPoint.footStepForward.x ,_footStepsPoint.footStepSide.y, 0, 0);
+  SingleSupportLeft const& source_;
+//  SingleSupportLeft singleSupportLeft;
+//  SingleSupportRight singleSupportRight;
+};
+class RightStepFinish : public AbstractTransition {
+public:
+  RightStepFinish(const SingleSupportRight& source);
+  virtual bool condition();
+  virtual std::string destination() const;
+private:
+  SingleSupportRight const& source_;
 //  SingleSupportLeft singleSupportLeft;
 //  SingleSupportRight singleSupportRight;
 };
 class StepPossible : public AbstractTransition {
 public:
-  StepPossible(const FootStepsPoint& footStepsPoint,  LegPoint& legPoint);
+  StepPossible(const Pose2f& speed ,LegPoint& legPoint);
 	virtual bool condition();
 private:
 LegPoint& _legPoint;
-FootStepsPoint _footStepsPoint;
-MotionRequest motionRequest;
 //SingleSupportLeft singleSupportLeft;
 //SingleSupportRight singleSupportRight;
 };
 class IsReady : public AbstractTransition {
   virtual bool condition();
 private:
-  MotionRequest motionRequest;
 //  SingleSupportLeft singleSupportLeft;
 //  SingleSupportRight singleSupportRight;
 };

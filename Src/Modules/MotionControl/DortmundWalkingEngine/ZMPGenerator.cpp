@@ -121,34 +121,40 @@ void ZMPGenerator::planZMP(RefZMP &refZMP)
     // rotation. So, first create ZMP trajectory through foot and 
     // translate/rotate it into the woorld coordinate system by using fp
 
+
     fp = (*_footList)->footPos[ZMP::phaseToZMPFootMap[(*_footList)->phase]];
 
+
     Point rf=(*_footList)->footPos[RIGHT_FOOT];
+//    std::cout << "RRRRRRRRRRRRRRRRRRRR" << "footPose.x   " << rf.x << "footPose.y   " << rf.y << "footPose.z   " << rf.z << std::endl;
     Point lf=(*_footList)->footPos[LEFT_FOOT];
 
     rf.rotate2D(-fp.r);
     lf.rotate2D(-fp.r);
 
-    // Diese Art der Erzeugung ist bei Kurven nicht mehr korrekt. Um wirklich eine möglichst Gleichförmige
-    // Vorwärtsbewegung zu erzeugen muß der ZMP im Roboterkoordinatensystem in x und y Richtung erzeugt werden,
-    // nicht wie derzeit im Fußkoordinatensystem. Allerdings erfordert das Bedingungen wie die Ausrichtung
-    // des Standfußes zu Begin und zum Ende der Phase für die x-Geschwindigkeit (da diese dann nicht mehr nur
-    // von der Fußlänge abhängt, sondern auch von der Rotation), und die aktuelle Ausrichtung, um die aktuelle
-    // Breite des Fußes bestimmen zu können (wichtig für die y-Schwingung).
+    // Diese Art der Erzeugung ist bei Kurven nicht mehr korrekt. Um wirklich eine mï¿½glichst Gleichfï¿½rmige
+    // Vorwï¿½rtsbewegung zu erzeugen muï¿½ der ZMP im Roboterkoordinatensystem in x und y Richtung erzeugt werden,
+    // nicht wie derzeit im Fuï¿½koordinatensystem. Allerdings erfordert das Bedingungen wie die Ausrichtung
+    // des Standfuï¿½es zu Begin und zum Ende der Phase fï¿½r die x-Geschwindigkeit (da diese dann nicht mehr nur
+    // von der Fuï¿½lï¿½nge abhï¿½ngt, sondern auch von der Rotation), und die aktuelle Ausrichtung, um die aktuelle
+    // Breite des Fuï¿½es bestimmen zu kï¿½nnen (wichtig fï¿½r die y-Schwingung).
 
     float pxss=vxss*tss/2;
 
     const float *polygonLeft = theWalkingEngineParams.footMovement.polygonLeft;
     const float *polygonRight = theWalkingEngineParams.footMovement.polygonRight;
     
+//    std::cout << "Point BEFORE Switch case" << "      p.x      " << p.x << "      p.y   " << p.y << "     p.z   " << p.z << std::endl;
     bool toConvert=false;
+//    std::cout << "phase " << (*_footList)->phase << std::endl;
     switch ((*_footList)->phase)
     {
 
     case firstSingleSupport:
       p.y=FourPointBezier1D(polygonLeft, (float)(*_footList)->frameInPhase/(*_footList)->singleSupportLen);
       p.x=-pxss+pc*(float)theControllerParams.dt*vxss;
-      toConvert=true;    
+      toConvert=true;
+//      std::cout << "case =   firstSingleSupportt" << std::endl;
       break;
 
     case firstDoubleSupport:
@@ -159,6 +165,7 @@ void ZMPGenerator::planZMP(RefZMP &refZMP)
         plgn[3]=-(float)(lf.y-rf.y)+polygonRight[0];
         p.y=FourPointBezier1D(plgn, (float)(*_footList)->frameInPhase/(*_footList)->doubleSupportLen);
         toConvert=true;
+//        std::cout << "case =   first double support" << std::endl;
       }
       p.x=+pxss+pc*(float)theControllerParams.dt*vxds;
       break;
@@ -167,6 +174,7 @@ void ZMPGenerator::planZMP(RefZMP &refZMP)
       p.y=FourPointBezier1D(polygonRight, (float)(*_footList)->frameInPhase/(*_footList)->singleSupportLen);
       p.x=-pxss+pc*(float)theControllerParams.dt*vxss;
       toConvert=true;
+//      std::cout << "case =   first second support" << std::endl;
       break;
 
     case secondDoubleSupport:
@@ -178,15 +186,20 @@ void ZMPGenerator::planZMP(RefZMP &refZMP)
         p.y=FourPointBezier1D(plgn, (float)(*_footList)->frameInPhase/(*_footList)->doubleSupportLen);
         toConvert=true;
       }
+//        std::cout << "case =   second double support" << std::endl;
       p.x=+pxss+pc*(float)theControllerParams.dt*vxds;
       break;
 
     default:
       p.x = -pxss;
       p.y = -theWalkingEngineParams.footMovement.footYDistance;
+//      std::cout << "case =   default0" << std::endl;
+
       toConvert = true;
       break;
     }
+
+//    std::cout << "Point AFTER Switch case" << "      p.x      " << p.x << "      p.y   " << p.y << "     p.z   " << p.z << std::endl;
 
     if (spdx>0 && -lpxss>p.x)
       // speed is >0, so the zmp should go forward, but wants to jump back. We won't allow it, and wait

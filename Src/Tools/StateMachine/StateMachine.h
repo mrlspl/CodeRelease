@@ -18,14 +18,18 @@ public:
 
 
 	void switchState();
-	void update();;
+	void update();
+	void addState(std::string id, AbstractState *state);
+	void setState(std::string id);
+	std::string getCurrentStateId();
 
-  std::map<std::string, std::shared_ptr<AbstractState>> states;
 
 
 private:
-	AbstractState *currentState;
+  std::map<std::string, std::unique_ptr<AbstractState> > states;
+	std::unique_ptr<AbstractState> currentState = NULL;
 	AbstractTransition *currentTransition;
+	std::string currentStateId;
 };
 
 #endif /* STATEMACHINE_H_ */

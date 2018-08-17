@@ -5,38 +5,53 @@
  */
 
 #include "WalkTransitions.h"
+#include "WalkPhases.h"
+#include <iostream>
 
-StepFinish::StepFinish(const FootStepsPoint& footStepsPoint, LegPoint& legPoint) :
-    _legPoint(legPoint), _footStepsPoint(footStepsPoint)
+LeftStepFinish::LeftStepFinish(const SingleSupportLeft& source) :
+    source_(source)
 {
 }
-bool StepFinish::condition()
+bool LeftStepFinish::condition()
 {
-//  if (!singleSupportLeft.legPointsFile.empty()) return false;
-//  {
-//    return true;
-//  }
-//
-  return false;
+//  std::cout << "source   " << (source_.counter > 50) << std::endl;
+  return source_.counter > 50;
 
 }
-StepPossible::StepPossible(const FootStepsPoint& footStepsPoint,
-    LegPoint& legPoint) :
-    _legPoint(legPoint), _footStepsPoint(footStepsPoint)
+std::string LeftStepFinish::destination() const
 {
-  destination = "SingleSupportRight";
+  return "SingleSupportRight";
+}
+
+RightStepFinish::RightStepFinish(const SingleSupportRight& source) :
+        source_(source)
+{
+}
+bool RightStepFinish::condition()
+{
+  return source_.counter > 50;
+}
+
+std::string RightStepFinish::destination() const
+{
+  return "SingleSupportLeft";
+}
+
+
+StepPossible::StepPossible(const Pose2f& speed ,LegPoint& legPoint) :
+    _legPoint(legPoint)
+{
+//  destination = "SingleSupportRight";
 }
 bool StepPossible::condition()
 {
-////  if (~singleSupportLeft.legPointsFile.empty()
-////      /*&& _footStepsPoint.footStepForward*/ && motionRequest.walkRequest.isReady)
-////      //&& _legPoint.isOnFloor[1])
+//  if (
+//      /*&& _footStepsPoint.footStepForward*/ )
+//      //&& _legPoint.isOnFloor[1])
 //  {
 //    return true;
 //  }
-////  else if (!singleSupportLeft.legPointsFile.empty()
-////      /*&&_footStepsPoint.footStepForward*/&& motionRequest.walkRequest.isReady)
-//////      && _legPoint.isOnFloor[0])
+//  else if ()
 //  {
 //    return true;
 //  }
@@ -46,34 +61,33 @@ bool StepPossible::condition()
 
 bool IsReady::condition()
 {
-//  if (motionRequest.walkRequest.isReady)
-//  {
-//    std::cout << __LINE__ << __FILE__ << "come here and fix this data "
-//        << std::endl;
-////    destination = new SingleSupportLeft;
-//    return true;
-//  }
+  if (true /* mean ready command from behavior*/)
+  {
+    std::cout << __LINE__ << __FILE__ << "come here and fix this data "
+        << std::endl;
+    return true;
+  }
   return false;
 }
-
-bool KickRequestRight::condition()
-{
-  return false;
-
-}
-bool KickRequestLeft::condition()
-{
-  return false;
-}
-bool KickFinish::condition()
-{
-  return false;
-}
-bool RobotIsFalling::condition()
-{
-  return false;
-}
-bool RobotRecoverd::condition()
-{
-  return false;
-}
+//
+//bool KickRequestRight::condition()
+//{
+//  return false;
+//
+//}
+//bool KickRequestLeft::condition()
+//{
+//  return false;
+//}
+//bool KickFinish::condition()
+//{
+//  return false;
+//}
+//bool RobotIsFalling::condition()
+//{
+//  return false;
+//}
+//bool RobotRecoverd::condition()
+//{
+//  return false;
+//}

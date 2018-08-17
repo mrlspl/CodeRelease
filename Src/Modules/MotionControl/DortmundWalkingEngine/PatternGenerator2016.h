@@ -53,6 +53,7 @@ Contact e-mail: oliver.urbann@tu-dortmund.de
 #include "Representations/MotionControl/ControllerParams.h"
 #include "Representations/Modeling/BallModel.h"
 #include "Tools/Module/Module.h"
+#include "Tools/StateMachine/StateMachine.h"
 
 #define TRANSITION_NOT_POSSIBLE -1
 #define OK 0
@@ -156,6 +157,9 @@ protected:
   /** The current state of the pattern generator. */
   State currentState;
 
+
+
+  StateMachine stateMachine;
   /** The request state */
   State newState;
 
@@ -167,7 +171,7 @@ protected:
 
   /** Current support phase */
   WalkingPhase currentWalkingPhase;
-  FootSteps *steps;
+    FootSteps *steps;
   int previewDelta;
 
   /** Default rotation of feet. Set to 0. */

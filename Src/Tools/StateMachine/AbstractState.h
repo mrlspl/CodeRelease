@@ -19,7 +19,7 @@ public :
 	virtual void onEnter(){}
 	virtual void onExit(){}
 	virtual ~AbstractState(){}
-	std::vector<AbstractTransition*> transition;
+	std::vector<AbstractTransition*> transitions;
 
 protected:
 	std::string stateId;

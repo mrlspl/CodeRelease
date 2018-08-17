@@ -5,58 +5,94 @@
  */
 
 #include "WalkPhases.h"
+#include "WalkTransitions.h"
 
 float z = 0.02f;
 Point p1(0, 0, 0, 0);
 Point p2(0, 0, z, 0);
 
-SingleSupportLeft::SingleSupportLeft(const FootStepsPoint& footStepsPoint,
-    LegPoint& legPoint) :
-     _footStepsPoint(footStepsPoint), _legPoint(
-        legPoint), AbstractState("SingleSupportLeft"), z(0.02f)
+SingleSupportLeft::SingleSupportLeft(const Pose2f& requestedSpeed ,LegPoint& legPoint) :AbstractState("SingleSupportLeft") ,
+    speed(requestedSpeed),
+     _legPoint(legPoint),z(0.02f)
+
 {
-  legPointsFile.clear();
+  transitions.push_back(new LeftStepFinish(*this));
 
 }
 void SingleSupportLeft::update()
 {
-  legPointsFile.push_back(LegPoint(p1, p3, p1));
+//  std::cout << "I'm here man SingleSupportLeft" << std::endl;
+  Point p3 = Point(speed.translation.x(),
+      speed.translation.y(), z, 0);
+  _legPoint = LegPoint(p1, p3);
+
+  if (currentMovement.speed.translation.y() < 0)
+    _legPoint.robotPose = p1;
+  else
+    _legPoint.robotPose = p3;
+
+  counter ++;
+
 }
 void SingleSupportLeft::onEnter()
 {
-  legPointsFile.push_back(LegPoint(p1, p2, p1));
+  counter = 0;
 }
 void SingleSupportLeft::onExit()
 {
 }
 
-SingleSupportRight::SingleSupportRight(const FootStepsPoint& footStepsPoint,
-    LegPoint& legPoint) :
-    AbstractState("SingleSupportRight"), _footStepsPoint(footStepsPoint), _legPoint(
+SingleSupportRight::SingleSupportRight(const Pose2f& requestedSpeed ,LegPoint& legPoint) :    AbstractState("SingleSupportRight"),
+        speed(requestedSpeed),
+ _legPoint(
         legPoint), z(0.02f)
 {
-  legPointsFile.clear();
+  transitions.push_back(new RightStepFinish(*this));
+
 }
 void SingleSupportRight::update()
 {
-  legPointsFile.push_back(LegPoint(p3, p1, p1));
+//  std::cout << "I'm here man SingleSupportRight" << std::endl;
+  Point p3 = Point(speed.translation.x(),
+      speed.translation.y(), z, 0);
+  _legPoint = LegPoint(p3, p1);
+  if (currentMovement.speed.translation.y() < 0)
+  {
 
+    Point p2 = Point(speed.translation.x(),
+        speed.translation.y(), 0, 0);
+    _legPoint.robotPose = p2;
+  }
+  else
+  {
+    Point p1 = Point(speed.translation.x(),
+        speed.translation.y(), 0, 0);
+    _legPoint.robotPose = p1;
+  }
+
+  counter ++;
 }
 void SingleSupportRight::onExit()
 {
 }
 void SingleSupportRight::onEnter()
 {
+  counter = 0;
 }
 
 
-Ready::Ready(const FootStepsPoint& footStepsPoint, LegPoint& legPoint) :
-    AbstractState("Ready"), _footStepsPoint(footStepsPoint), _legPoint(legPoint)
+Ready::Ready(const Pose2f& requestedSpeed ,LegPoint& legPoint) :
+        speed(requestedSpeed),
+    AbstractState("Ready"), _legPoint(
+        legPoint), stateCounter(0)
 {
-  legPointsFile.clear();
 }
 
 void Ready::update()
 {
-
+  _legPoint.robotPose = p1;
+}
+void Ready::onEnter()
+{
+  stateCounter = 1;
 }

@@ -8,101 +8,98 @@
 #define WALKPHASES_H_
 
 #include "Tools/StateMachine/AbstractState.h"
-#include "../PatternGenerator2016.h"
-#include "../FootStepsPoint.h"
+#include "../WalkingInformations.h"
 #include "../LegPoint.h"
-#include "../MovmentInformation.h"
 
 class AbstractState;
 class SingleSupportLeft: public AbstractState
 {
 public:
-  SingleSupportLeft(const FootStepsPoint& footStepsPoint, LegPoint& legPoint);
+  SingleSupportLeft(const Pose2f& requestedSpeed ,LegPoint& legPoint);
   virtual void update();
   virtual void onEnter();
   virtual void onExit();
-  FootStepsPoint _footStepsPoint;
-  std::vector<LegPoint> legPointsFile;
+  void updateRobotPose();
+  Point robotCurrentPosition;
+  Point robotPoseAfterStep;
+  float direction;
+
+
+  unsigned int counter;
 private:
   LegPoint& _legPoint;
-  std::vector<LegPoint> legPointsFileIter;
-  Point p3 = Point(_footStepsPoint.footStepForward.x, 0, z, 0);
+  MovementInformation currentMovement;
+  Pose2f speed;
   float z;
 
 };
 class SingleSupportRight: public AbstractState
 {
 public:
-  SingleSupportRight(const FootStepsPoint& footStepsPoint, LegPoint& legPoint);
+  SingleSupportRight(const Pose2f& requestedSpeed ,LegPoint& legPoint);
   virtual void update();
   virtual void onEnter();
   virtual void onExit();
+  void updateRobotPose();
+  Point robotCurrentPosition;
+  Point robotPoseAfterStep;
+  unsigned int counter;
 
-  std::vector<LegPoint> legPointsFile;
 private:
-  FootStepsPoint _footStepsPoint;
   LegPoint& _legPoint;
+  MovementInformation currentMovement;
+  Pose2f speed;
   float z;
-  Point p3 = Point(_footStepsPoint.footStepForward.x, 0, z, 0);
 };
 class Ready: public AbstractState
 {
 public:
-  Ready(const FootStepsPoint& footStepsPoint, LegPoint& legPoint);
+  Ready(const Pose2f& requestedSpeed ,LegPoint& legPoint);
   virtual void update();
+  virtual void onEnter();
+  unsigned int stateCounter;
 
-    std::vector<LegPoint> legPointsFile;
 private:
-  FootStepsPoint _footStepsPoint;
     LegPoint& _legPoint;
-
-
-};
-
-class Recovery: public AbstractState
-{
-  Recovery(const FootStepsPoint& footStepsPoint, LegPoint& legPoint);
-  ~Recovery();
-  virtual void update();
-  virtual void onEnter();
-  virtual void onExit();
-
-private:
-  FootStepsPoint _footStepsPoint;
-  LegPoint& _legPoint;
-  Point p3 = Point(_footStepsPoint.footStepForward.x, 0, 0, 0);
-  Point p4 = Point(_footStepsPoint.footStepForward.x,
-      _footStepsPoint.footStepSide.y, 0, 0);
-};
-
-class KickRight: public AbstractState
-{
-  KickRight();
-  ~KickRight();
-  virtual void update();
-  virtual void onEnter();
-  virtual void onExit();
-private:
-  FootStepsPoint _footStepsPoint;
-  LegPoint& _legPoint;
-  Point p3 = Point(_footStepsPoint.footStepForward.x, 0, 0, 0);
-  Point p4 = Point(_footStepsPoint.footStepForward.x,
-      _footStepsPoint.footStepSide.y, 0, 0);
-};
-
-class KickLeft: public AbstractState
-{
-  KickLeft();
-  ~KickLeft();
-  virtual void update();
-  virtual void onEnter();
-  virtual void onExit();
-private:
-  FootStepsPoint _footStepsPoint;
-  LegPoint& _legPoint;
-  Point p3 = Point(_footStepsPoint.footStepForward.x, 0, 0, 0);
-  Point p4 = Point(_footStepsPoint.footStepForward.x,
-      _footStepsPoint.footStepSide.y, 0, 0);
+    MovementInformation currentMovement;
+    Pose2f speed;
 
 };
+//
+//class Recovery: public AbstractState
+//{
+//  Recovery(const Pose2f& requestedSpeed ,LegPoint& legPoint);
+//  ~Recovery();
+//  virtual void update();
+//  virtual void onEnter();
+//  virtual void onExit();
+//  unsigned int stateCounter;
+//
+//private:
+//  LegPoint& _legPoint;
+//};
+//
+//class KickRight: public AbstractState
+//{
+//  KickRight();
+//  ~KickRight();
+//  virtual void update();
+//  virtual void onEnter();
+//  virtual void onExit();
+//  unsigned int stateCounter;
+//private:
+//  LegPoint& _legPoint;
+//};
+//
+//class KickLeft: public AbstractState
+//{
+//  KickLeft();
+//  ~KickLeft();
+//  virtual void update();
+//  virtual void onEnter();
+//  virtual void onExit();
+//private:
+//  LegPoint& _legPoint;
+//
+//};
 #endif /* WALKPHASES_H_ */

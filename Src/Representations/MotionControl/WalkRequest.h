@@ -41,7 +41,7 @@ STREAMABLE(WalkRequest,
     frontKickLeft, /**< Execute the custom step file */
     frontKickRight, /**< Execute the custom step file */
   });
-
+  bool isReady;
   bool isValid() const
   {
     return !std::isnan(static_cast<float>(request.rotation)) && !std::isnan(request.translation.x()) && !std::isnan(request.translation.y());
@@ -65,6 +65,8 @@ STREAMABLE(WalkRequest,
     }
     return false;
   },
+
+//  bool isReady;
 
   (RequestType)(speed) requestType, /**< The walking mode. */
   (Pose2f) request, /**< Target relative to robot or speed in mm/s and radian/s. */

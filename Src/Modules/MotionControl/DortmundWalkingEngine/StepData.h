@@ -34,6 +34,8 @@ public:
   Point footPos[2];
   bool onFloor[2];
   float direction, pitch, roll;
+
+
 };
 
 class Footposition : public StepData
@@ -50,7 +52,7 @@ public:
 
   Point speed;
 
-  void operator = (const StepData &p)
+    void operator = (const StepData &p)
   {
     this->StepData::operator =(p);
   }
