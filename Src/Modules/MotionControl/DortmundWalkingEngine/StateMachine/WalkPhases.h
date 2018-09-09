@@ -8,7 +8,8 @@
 #define WALKPHASES_H_
 
 #include "Tools/StateMachine/AbstractState.h"
-#include "../WalkingInformations.h"
+#include "Tools/Math/Pose2f.h"
+#include "../Point.h"
 #include "../LegPoint.h"
 
 class AbstractState;
@@ -23,12 +24,10 @@ public:
   Point robotCurrentPosition;
   Point robotPoseAfterStep;
   float direction;
-
-
   unsigned int counter;
+
 private:
   LegPoint& _legPoint;
-  MovementInformation currentMovement;
   Pose2f speed;
   float z;
 
@@ -47,7 +46,6 @@ public:
 
 private:
   LegPoint& _legPoint;
-  MovementInformation currentMovement;
   Pose2f speed;
   float z;
 };
@@ -57,11 +55,10 @@ public:
   Ready(const Pose2f& requestedSpeed ,LegPoint& legPoint);
   virtual void update();
   virtual void onEnter();
-  unsigned int stateCounter;
+  unsigned int counter;
 
 private:
     LegPoint& _legPoint;
-    MovementInformation currentMovement;
     Pose2f speed;
 
 };

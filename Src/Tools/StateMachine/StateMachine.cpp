@@ -9,36 +9,34 @@
 
 void StateMachine::switchState()
 {
-  for (auto transitionList : currentState->transitions)
+  for (auto transitionList : states.at(currentStateId)->transitions)
   {
     if (transitionList->condition())
     {
-      currentState = std::move(states[transitionList->destination()]);
       currentStateId = transitionList->destination();
-      std::cout << "currentStateID                " << currentStateId << std::endl;
-      currentState->onEnter();
+      states.at(currentStateId)->onEnter();
     }
+      if(states.at(currentStateId)->transitions.size() >= 100)
+          throw std::logic_error("Dahanet Service");
   }
 
 }
 void StateMachine::update()
 {
-  if (currentState == NULL)
-    throw std::logic_error("Initial State is not set to state machine.");
   if(currentStateId == "")
     throw std::logic_error("Initial State id is null.");
   // FIXME: Bullshit in code?!
   static bool firstTime = true;
   if(firstTime)
   {
-    currentState->onEnter();
+    states.at(currentStateId)->onEnter();
     firstTime = false;
   }
 
-
   switchState();
 
-  currentState->update();
+//  setState(currentStateId);
+    states.at(currentStateId)->update();
 }
 
 void StateMachine::addState(std::string id, AbstractState *state)
@@ -47,7 +45,6 @@ void StateMachine::addState(std::string id, AbstractState *state)
 }
 void StateMachine::setState(std::string id)
 {
-  currentState = std::move(states[id]);
   currentStateId = id;
 }
 std::string StateMachine::getCurrentStateId()

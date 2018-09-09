@@ -20,8 +20,6 @@
 #include "Representations/MotionControl/OdometryData.h"
 #include "Representations/MotionControl/SpecialActionsOutput.h"
 #include "Representations/MotionControl/WalkingEngineOutput.h"
-#include "Representations/MotionControl/WalkingInfo.h"
-#include "Representations/MotionControl/SpeedInfo.h"
 #include "Representations/Sensing/FallDownState.h"
 #include "Representations/Sensing/InertialData.h"
 #include "Representations/Sensing/RobotModel.h"
@@ -77,10 +75,8 @@ MODULE(MotionCombinator,
   REQUIRES(RobotInfo),
   REQUIRES(StiffnessSettings),
   REQUIRES(WalkingEngineOutput),
-  REQUIRES(WalkingInfo),
-  REQUIRES(SpeedInfo),
-  PROVIDES(JointRequest),
   REQUIRES(JointRequest),
+  PROVIDES(JointRequest),
   PROVIDES(MotionInfo),
   PROVIDES(OdometryData),
   LOADS_PARAMETERS(

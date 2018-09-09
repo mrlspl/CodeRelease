@@ -42,8 +42,12 @@ LegPoint& _legPoint;
 //SingleSupportRight singleSupportRight;
 };
 class IsReady : public AbstractTransition {
+  IsReady(const Ready& source);
   virtual bool condition();
+  virtual std::string destination() const;
+
 private:
+  Ready const& source_;
 //  SingleSupportLeft singleSupportLeft;
 //  SingleSupportRight singleSupportRight;
 };

@@ -5,7 +5,6 @@
  */
 
 #include "WalkTransitions.h"
-#include "WalkPhases.h"
 #include <iostream>
 
 LeftStepFinish::LeftStepFinish(const SingleSupportLeft& source) :
@@ -14,8 +13,7 @@ LeftStepFinish::LeftStepFinish(const SingleSupportLeft& source) :
 }
 bool LeftStepFinish::condition()
 {
-//  std::cout << "source   " << (source_.counter > 50) << std::endl;
-  return source_.counter > 50;
+  return (source_.counter >= 22);
 
 }
 std::string LeftStepFinish::destination() const
@@ -29,7 +27,7 @@ RightStepFinish::RightStepFinish(const SingleSupportRight& source) :
 }
 bool RightStepFinish::condition()
 {
-  return source_.counter > 50;
+  return (source_.counter >= 23);
 }
 
 std::string RightStepFinish::destination() const
@@ -45,29 +43,19 @@ StepPossible::StepPossible(const Pose2f& speed ,LegPoint& legPoint) :
 }
 bool StepPossible::condition()
 {
-//  if (
-//      /*&& _footStepsPoint.footStepForward*/ )
-//      //&& _legPoint.isOnFloor[1])
-//  {
-//    return true;
-//  }
-//  else if ()
-//  {
-//    return true;
-//  }
   return false;
 
 }
 
+IsReady::IsReady(const Ready& source) : source_(source)
+{}
 bool IsReady::condition()
 {
-  if (true /* mean ready command from behavior*/)
-  {
-    std::cout << __LINE__ << __FILE__ << "come here and fix this data "
-        << std::endl;
-    return true;
-  }
-  return false;
+    return (source_.counter >= 100);
+}
+std::string IsReady::destination() const
+{
+  return "SingleSupportLeft";
 }
 //
 //bool KickRequestRight::condition()

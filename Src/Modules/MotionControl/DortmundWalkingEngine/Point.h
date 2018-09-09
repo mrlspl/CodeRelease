@@ -27,6 +27,12 @@ class Point
 {
 public:
 
+  Point(float x)
+  {
+    this->x = x;
+    this->y = x;
+    this->z = x;
+  }
 
   /**
   * Constructor. Creates a point at coordinates (x, y, 0).
@@ -223,6 +229,23 @@ public:
   Point operator / (const float f)
   {
     return *this*(1/f);
+  }
+
+  /**
+  * Division by p. Divides every component by the corresponding value in p.
+  * @param p The point.
+  * @return Copy of the instance.
+  */
+  Point operator / (const Point &p)
+  {
+    Point ret;
+    ret.x=x/p.x;
+    ret.y=y/p.y;
+    ret.z=z/p.z;
+    ret.rx=rx/p.rx;
+    ret.ry=ry/p.ry;
+    ret.r=r/p.r;
+    return ret;
   }
 
   /**

@@ -13,9 +13,6 @@
 
 class StateMachine {
 public:
-//  	StateMachine();
-//	virtual ~StateMachine();
-
 
 	void switchState();
 	void update();
@@ -27,8 +24,6 @@ public:
 
 private:
   std::map<std::string, std::unique_ptr<AbstractState> > states;
-	std::unique_ptr<AbstractState> currentState = NULL;
-	AbstractTransition *currentTransition;
 	std::string currentStateId;
 };
 
